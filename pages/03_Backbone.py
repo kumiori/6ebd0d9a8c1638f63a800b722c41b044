@@ -12,7 +12,9 @@ apply_theme()
 
 repo = get_notion_repo()
 session = get_active_session(repo)
-render_system_status(bool(repo), bool(session.get("id") or session.get("status") == "local"))
+render_system_status(
+    bool(repo), bool(session.get("id") or session.get("status") == "local")
+)
 
 heading(
     "backend overview",
@@ -22,7 +24,7 @@ heading(
 
 col_a, col_b, col_c = st.columns(3)
 col_a.metric("Session", session.get("code") or "MONX26")
-col_b.metric("Notion", "connected" if repo else "local")
+col_b.metric("Database", "connected" if repo else "local")
 col_c.metric("Mode", "debug" if settings.debug else "standard")
 
 st.subheader("Database wiring")

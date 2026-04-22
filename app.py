@@ -4,7 +4,12 @@ from typing import Any, Dict
 
 import streamlit as st
 
-from infra.app_context import actor_name, get_active_session, get_notion_repo, set_actor_name
+from infra.app_context import (
+    actor_name,
+    get_active_session,
+    get_Database_repo,
+    set_actor_name,
+)
 from infra.key_codec import split_emoji_symbols
 from services.access_keys import mint_access_key
 from ui import apply_theme, heading, render_system_status, set_page
@@ -30,7 +35,9 @@ Optional details can make the experience easier:
 - Email, only if you want a credential reminder later.
 """
     )
-    if st.button("Understood, create the key", type="primary", use_container_width=True):
+    if st.button(
+        "Understood, create the key", type="primary", use_container_width=True
+    ):
         st.session_state[SHOW_MINT_FORM_KEY] = True
         st.session_state[SHOW_MINT_DIALOG_KEY] = False
         st.rerun()
@@ -92,12 +99,16 @@ def _render_mint_panel(repo: Any, session: Dict[str, Any]) -> None:
             mint_result = mint_access_key(nickname=mint_name, role="Participant")
             status.update(label="Building access card", state="running")
             try:
-                _persist_player(repo, session, mint_result, mint_name, mint_intent, mint_email)
+                _persist_player(
+                    repo, session, mint_result, mint_name, mint_intent, mint_email
+                )
                 if repo and repo.players_db_id:
-                    status.update(label="Saved to Notion", state="running")
+                    status.update(label="Saved to Database", state="running")
             except Exception as exc:
-                status.update(label="Key created, Notion save failed", state="error")
-                st.warning(f"Key created locally, but Notion persistence failed: {exc}")
+                status.update(label="Key created, Database save failed", state="error")
+                st.warning(
+                    f"Key created locally, but Database persistence failed: {exc}"
+                )
             st.session_state[MINT_RESULT_KEY] = mint_result
             st.session_state["monx26_access_key"] = mint_result["access_key"]
             set_actor_name(mint_name)
@@ -113,7 +124,9 @@ def _render_mint_result() -> None:
     if not mint_result:
         return
 
-    st.success("Your access key is ready. You can now continue to the collective space.")
+    st.success(
+        "Your access key is ready. You can now continue to the collective space."
+    )
     st.markdown("### Your key shortcut")
     st.markdown(
         f"<div style='font-size:4.1rem;line-height:1.2;text-align:center'>{mint_result.get('emoji4', '-')}</div>",
@@ -131,15 +144,19 @@ def _render_mint_result() -> None:
         use_container_width=True,
         key="monx26-splash-mint-download-pdf",
     )
-    st.page_link("pages/01_Participate.py", label="Continue to audience interaction", icon="🗣️")
+    st.page_link(
+        "pages/01_Participate.py", label="Continue to audience interaction", icon="🗣️"
+    )
 
 
 set_page("Home", "◼")
 apply_theme()
 
-repo = get_notion_repo()
+repo = get_Database_repo()
 session = get_active_session(repo)
-render_system_status(bool(repo), bool(session.get("id") or session.get("status") == "local"))
+render_system_status(
+    bool(repo), bool(session.get("id") or session.get("status") == "local")
+)
 st.session_state.setdefault(MINT_RESULT_KEY, None)
 st.session_state.setdefault(SHOW_MINT_FORM_KEY, False)
 st.session_state.setdefault(SHOW_MINT_DIALOG_KEY, False)
@@ -165,6 +182,36 @@ _render_mint_result()
 if st.session_state.pop(MINT_JUST_COMPLETED_KEY, False):
     st.balloons()
 
+st.markdown(
+    """
+<section class="monx-manifesto">
+  <div class="monx-manifesto__label">COLLETTIVO MONX26</div>
+  <p>
+    <strong>Monx26</strong> est un collectif né du partage des arts. MONX,
+    Monasteriolum, d’orchestration de nœuds et concepts expérimentaux, est une
+    base temporelle, une discipline légère de liberté commune d’introspection et
+    de recherche. C’est avant tout un retour aux origines de Montreuil.
+  </p>
+  <p>
+    L’objectif est d’offrir une orchestration et une coordination sans
+    hiérarchie. Le leitmotiv ? Les nœuds, qui se mélangent, s’entrechoquent et se
+    complètent.
+  </p>
+  <p>
+    MONX, c’est la volonté de créer et de promouvoir des arts expérimentaux
+    accessibles à tous et partagés par tous. 26 est également un nombre clé :
+    l’année de notre création et, en même temps, l’allégorie des vingt-six
+    lettres de l’alphabet, témoignant de notre volonté d’ouverture et de
+    production pluridisciplinaire.
+  </p>
+  <p class="monx-manifesto__closing">
+    L’autonomie, la communauté et l’orchestration sont nos impulsions.
+  </p>
+</section>
+""",
+    unsafe_allow_html=True,
+)
+
 left, right = st.columns([1.15, 0.85], gap="large")
 
 with left:
@@ -172,7 +219,9 @@ with left:
     st.write(
         "Use this app to register presence, send signals, make proposals, and follow collective decisions as they evolve."
     )
-    name = st.text_input("Name or handle", value=actor_name(), placeholder="anonymous is allowed")
+    name = st.text_input(
+        "Name or handle", value=actor_name(), placeholder="anonymous is allowed"
+    )
     if st.button("Remember me", use_container_width=True):
         set_actor_name(name)
         st.success("Presence remembered for this browser session.")
@@ -188,11 +237,13 @@ with right:
     st.metric("Code", session.get("code") or "MONX26")
     st.write(f"Status: `{session.get('status') or 'unknown'}`")
     if not repo:
-        st.info("Notion is not configured yet. The app is running in local mode.")
+        st.info("Database is not configured yet. The app is running in local mode.")
     elif not session.get("id"):
-        st.warning("Notion is connected, but no active/default session was found.")
+        st.warning("Database is connected, but no active/default session was found.")
     else:
-        st.success("Notion session is connected.")
+        st.success("Database session is connected.")
     st.markdown("</div>", unsafe_allow_html=True)
 
-st.caption("Built from the proven Streamlit + Notion architecture used in app_affranchis and app_iceicebaby.")
+st.caption(
+    "Built from the proven Streamlit + Database architecture used in app_affranchis and app_iceicebaby."
+)

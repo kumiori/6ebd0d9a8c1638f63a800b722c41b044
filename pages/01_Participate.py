@@ -18,7 +18,9 @@ apply_theme()
 repo = get_notion_repo()
 session = get_active_session(repo)
 device_id = ensure_device_id()
-render_system_status(bool(repo), bool(session.get("id") or session.get("status") == "local"))
+render_system_status(
+    bool(repo), bool(session.get("id") or session.get("status") == "local")
+)
 
 heading(
     "audience interface",
@@ -63,12 +65,17 @@ if st.button("Send", type="primary", use_container_width=True):
             actor=name.strip(),
             payload=payload,
         )
-        st.success("Sent to Notion.")
+        st.success("Sent to Database.")
     else:
         st.session_state.setdefault("monx26_local_responses", []).append(
-            {"kind": kind, "content": content.strip(), "actor": name.strip(), "payload": payload}
+            {
+                "kind": kind,
+                "content": content.strip(),
+                "actor": name.strip(),
+                "payload": payload,
+            }
         )
-        st.success("Saved locally for this session. Configure Notion to persist it.")
+        st.success("Saved locally for this session. Configure Database to persist it.")
 
 with st.expander("Local session buffer", expanded=False):
     st.json(st.session_state.get("monx26_local_responses", []))

@@ -74,7 +74,7 @@ def set_page(title: str = "", icon: str = "⬛") -> None:
         page_title=f"{title} · {settings.page_title}" if title else settings.page_title,
         page_icon=icon,
         layout="wide",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="collapsed",
     )
 
 
@@ -136,8 +136,29 @@ def apply_theme() -> None:
             padding-top: 3.2rem;
         }
         [data-testid="stSidebar"] {
-            background: var(--monx-sidebar);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            transform: translateX(-100%) !important;
+        }
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="collapsedControl"],
+        button[title="Open sidebar"],
+        button[aria-label="Open sidebar"],
+        button[title="Close sidebar"],
+        button[aria-label="Close sidebar"] {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        section[data-testid="stSidebar"] {
+            display: none !important;
+        }
+        [data-testid="stAppViewContainer"] > .main,
+        [data-testid="stAppViewContainer"] main {
+            margin-left: 0 !important;
         }
         [data-testid="stSidebar"] * {
             color: #e2e0dc;
@@ -212,6 +233,42 @@ def apply_theme() -> None:
         }
         .monx-muted {
             color: var(--monx-muted);
+        }
+        .monx-manifesto {
+            position: relative;
+            margin: 2.4rem 0 2rem;
+            padding: clamp(1.4rem, 3vw, 2.4rem);
+            border: 1px solid rgba(92, 39, 70, 0.72);
+            background:
+                linear-gradient(118deg, transparent 0 49%, rgba(217, 87, 159, 0.14) 49.1% 49.32%, transparent 49.55%),
+                rgba(10, 10, 12, 0.78);
+        }
+        .monx-manifesto__label {
+            margin-bottom: 1.15rem;
+            color: var(--monx-orange) !important;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        .monx-manifesto p {
+            max-width: 76ch;
+            margin: 0 0 1rem;
+            color: #e8e1dc !important;
+            font-size: clamp(1rem, 1.6vw, 1.15rem);
+            line-height: 1.78;
+        }
+        .monx-manifesto p strong {
+            color: var(--monx-ink) !important;
+            font-weight: 800;
+        }
+        .monx-manifesto__closing {
+            margin-top: 1.35rem !important;
+            color: var(--monx-ink) !important;
+            font-family: var(--monx-font-display) !important;
+            font-size: clamp(1.6rem, 3.6vw, 2.8rem) !important;
+            font-weight: 850 !important;
+            line-height: 1.03 !important;
         }
         [data-testid="stMarkdownContainer"],
         [data-testid="stCaptionContainer"],

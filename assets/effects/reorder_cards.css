@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #050505;
+  --paper: #f6edee;
+  --paper-alt: #f3e0d8;
+  --text: #0a0a0a;
+  --muted: #5f5357;
+  --accent: #e34b9a;
+  --accent-secondary: #f28c28;
+  --line: #5c2746;
+  --border: #2a2230;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-content: center;
+  overflow: hidden;
+  padding: clamp(1rem, 4dvw, 3rem);
+  background:
+    linear-gradient(116deg, transparent 0 30%, rgba(92, 39, 70, 0.38) 30.04% 30.14%, transparent 30.25%),
+    linear-gradient(62deg, transparent 0 72%, rgba(242, 140, 40, 0.16) 72.04% 72.14%, transparent 72.25%),
+    var(--bg);
+  color: var(--paper);
+  font-family: var(--font-sans);
+}
+
+#app {
+  width: min(1180px, calc(100vw - 2rem));
+}
+
+.reorder-shell {
+  position: relative;
+  display: grid;
+  gap: clamp(2rem, 5dvw, 4rem);
+}
+
+.intro {
+  max-width: 760px;
+}
+
+.kicker {
+  margin: 0 0 0.9rem;
+  color: var(--accent-secondary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: var(--paper);
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 8dvw, 7rem);
+  font-weight: 860;
+  line-height: 0.86;
+  letter-spacing: 0;
+}
+
+.intro p {
+  max-width: 56ch;
+  margin: 1.2rem 0 0;
+  color: #b7ada6;
+  font-size: clamp(0.98rem, 1.7dvw, 1.08rem);
+  line-height: 1.65;
+}
+
+.reorder-group {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2.6dvw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.field-card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  min-height: 150px;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--line), transparent 42%);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--text);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.field-card:active {
+  cursor: grabbing;
+}
+
+.field-card.alt {
+  background: var(--paper-alt);
+}
+
+.field-card::before {
+  content: "";
+  position: absolute;
+  inset: 0.8rem;
+  border: 1px solid color-mix(in oklab, var(--line), transparent 72%);
+  pointer-events: none;
+}
+
+.field-card.identity::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: color-mix(in oklab, var(--line), transparent 62%);
+  transform: rotate(26deg);
+  pointer-events: none;
+}
+
+.face-letter {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 6dvw, 4.6rem);
+  font-weight: 820;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.face-logo {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4dvw, 3.2rem);
+  font-weight: 820;
+  line-height: 0.86;
+  text-align: center;
+}
+
+.edge-label {
+  position: absolute;
+  color: var(--muted);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.edge-label.top {
+  top: 0.72rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.edge-label.bottom {
+  bottom: 0.72rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.edge-label.left {
+  left: 0.72rem;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg) scale(0.74);
+}
+
+.edge-label.right {
+  right: 0.72rem;
+  top: 50%;
+  transform: translate(50%, -50%) rotate(90deg) scale(0.74);
+}
+
+.axis-note {
+  color: #b7ada6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.paper-shadow {
+  position: fixed;
+  right: -8dvw;
+  top: -8dvw;
+  z-index: 1;
+  width: 72dvw;
+  height: 120dvh;
+  background: linear-gradient(225deg, rgba(227, 75, 154, 0.2) 0 31%, transparent 31.1%);
+  filter: blur(10px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  body {
+    overflow: auto;
+    align-content: start;
+  }
+
+  .reorder-group {
+    grid-template-columns: 1fr;
+  }
+
+  .field-card {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+}

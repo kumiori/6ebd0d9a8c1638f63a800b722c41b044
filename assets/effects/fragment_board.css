@@ -141,7 +141,8 @@ h1 {
   user-select: none;
   transition:
     border-color 160ms ease,
-    background 160ms ease;
+    background 160ms ease,
+    transform 160ms ease;
   will-change: transform;
 }
 
@@ -156,7 +157,12 @@ h1 {
   border-color: rgba(255, 46, 136, 0.66);
 }
 
+.fragment-card.is-added .fragment-number strong,
 .fragment-card.is-reordered .fragment-number strong {
+  color: var(--accent);
+}
+
+.fragment-card.is-added .fragment-handle {
   color: var(--accent);
 }
 
@@ -221,12 +227,40 @@ h1 {
   position: relative;
   z-index: 1;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 0.65rem;
   color: #6f6268;
   font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+.fragment-remove-button {
+  border: 1px solid rgba(111, 98, 104, 0.4);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  padding: 0.22rem 0.52rem;
+  text-transform: inherit;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.fragment-remove-button:hover,
+.fragment-remove-button:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #050505;
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .fragment-side {
@@ -301,12 +335,111 @@ h1 {
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.preset-button:hover,
+.preset-button:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .preset-button.active {
   border-color: var(--accent);
   background: var(--accent);
   color: #050505;
+}
+
+.fragment-editor {
+  grid-column: span 2;
+}
+
+.available-fragments {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.available-label {
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.available-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.available-chip {
+  min-width: 2.35rem;
+  min-height: 2rem;
+  padding: 0.36rem 0.62rem;
+  border: 1px solid rgba(183, 173, 166, 0.22);
+  border-radius: 999px;
+  background: #080808;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.available-chip:hover,
+.available-chip:focus-visible {
+  border-color: var(--accent);
+  background: rgba(255, 46, 136, 0.12);
+  color: var(--accent);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.fragment-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.fragment-edit-grid label {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.fragment-edit-grid span {
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.fragment-edit-grid input {
+  width: 100%;
+  border: 1px solid rgba(183, 173, 166, 0.22);
+  border-radius: 0;
+  background: #080808;
+  color: var(--text);
+  padding: 0.6rem 0.7rem;
+  outline: none;
+}
+
+.fragment-edit-grid input:focus {
+  border-color: var(--accent);
 }
 
 .action-button {
@@ -321,11 +454,30 @@ h1 {
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.action-button:hover,
+.action-button:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .action-button.primary {
   border-color: var(--accent);
   background: var(--accent);
+  color: #050505;
+}
+
+.action-button.primary:hover,
+.action-button.primary:focus-visible {
+  background: #ff61aa;
   color: #050505;
 }
 
@@ -358,6 +510,10 @@ h1 {
   .fragment-side {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .fragment-editor {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 640px) {
@@ -374,6 +530,14 @@ h1 {
   }
 
   .fragment-side {
+    grid-template-columns: 1fr;
+  }
+
+  .fragment-editor {
+    grid-column: auto;
+  }
+
+  .fragment-edit-grid {
     grid-template-columns: 1fr;
   }
 }
